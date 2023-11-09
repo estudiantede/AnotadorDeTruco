@@ -1,19 +1,54 @@
 #Se importa TODAS las librerias
 from guizero import *
 
-#Funciones
 def sumarPuntosJug1():
-    print("Se suma 1 punto al jugador 1")
-    puntos[0] += 1
+    print(puntos[0])
+    if (aPuntos == True):
+        puntoTotale = 15
+    else:
+        puntoTotale = 30
+    if (puntos[0] <= puntoTotale):
+        if (puntos[0] == puntoTotale):
+            #No se hace nada
+            print("Se está en la victoria")
+        else:
+            puntos[0] += 1
+        gano(puntos[0], 0)
 
 def sumarPuntosJug2():
-    print("Se suma 1 punto al jugador 2")
-    puntos[1] += 1
+    print("Los puntos del participante 2 son" + str(puntos[1]))
+    if (aPuntos == True):
+        puntoTotale = 15
+    else:
+        puntoTotale = 30
+    if (puntos[1] < puntoTotale):
+        if (puntos[1] == puntoTotale):
+            #No se hace nada
+            print("Se está en la victoria")
+        else:
+            puntos[1] += 1
+        gano(puntos[1], 0)
 
 def sumarPuntosJug3():
     print("Se suma 1 punto al jugador 3")
-    puntos[2] += 1
+    if (aPuntos == True):
+        puntoTotale = 15
+    else:
+        puntoTotale = 30
+    if (puntos[2] < puntoTotale):
+        if (puntos[0] == puntoTotale):
+            #No se hace nada
+            print("Se está en la victoria")
+        else:
+            puntos[2] += 1
+        gano(puntos[2], 0)
+        
 
+        # che no encontre mas bg de los que te puse ahí
+        #Ahí me fijo
+        #ahora te digo
+        #Wtf
+        #nose se esta bien lo que hice o si m
 def restarPuntosJug1():
     if puntos[0] > 0:
         puntos[0] -= 1
@@ -28,6 +63,7 @@ def restarPuntosJug3():
     if puntos[2] > 0:
         puntos[2] -= 1
         print("Se resta 1 punto al jugador 3")
+
 #Funciones que todavia no hacen nada
 def cambiarNombre1():
     if (envidoButton.value == "Flor"):
@@ -41,20 +77,45 @@ def cambiarNombre1():
         realEnvido.text = "Real Envido"
         faltaEnvido.text = "Falta envido"
 
-def cambiarNombre2():
-    print("Hola mundo")
+#Se devuelve 1 si gano
+#Si perdió se devuelve 0
+def gano(puntos, participante):
+    if (aPuntos == True):
+        if (puntos >= 15):
+            print("Gano el participante " + str(participante))
+            respuesta = yesno("Nueva partida", "Se empieza nueva partida?")
+            if respuesta == True:
+                inicializarVariables()
+    else:
+        if (puntos >= 30):
+            print("Gano el participante " + str(participante))
+            respuesta = yesno("Nueva partida", "Se empieza nueva partida?")
+            if respuesta == True:
+                inicializarVariables()
+    return 0
 
-def cambiarNombre3():
-    print("Hola mundo")
+def inicializarVariables():
+    puntos[0] = 0
+    puntos[1] = 0
+    puntos[2] = 0
+    empezarPartida()
 
 def empezarPartida():
-    question("Jugador 1", "Cómo se llama", initial_value=None)
-    question("Jugador 2", "Cómo se llama", initial_value=None)
-    question("Jugador 3", "Cómo se llama", initial_value=None)
-    yesno("Flor", "Se juega con flor?")
+    app.hide()
+    nombre1.clear()
+    nombre1.append(question("Jugador 1", "Cómo se llama", initial_value=None))
+    nombre2.clear()
+    nombre2.append(question("Jugador 2", "Cómo se llama", initial_value=None))
+    nombre3.clear()
+    nombre3.append(question("Jugador 3", "Cómo se llama", initial_value=None))
+
+    flor = yesno("Flor", "Se juega con flor?")
+    aPuntos = yesno("Puntos", "Se juega a 15?")
+    app.show()
 
 #Función llamada cuando se pulsa el boton de SUMAR PUNTOS
 def sumarPuntos():
+    """
     tru = sumarTruco()
     #Se fija si había truco o no
     if (tru == 0):
@@ -62,6 +123,7 @@ def sumarPuntos():
         return 
     sumarEnvido()
     defectoEnvido()
+    """
 
 #Función que calcula lo del truco
 def sumarTruco():
@@ -125,11 +187,6 @@ def sumarEnvido():
             print("Hay falta envido")
             envidos.append(-1)
 
-
-        #Verificar que se haya ingresado a algun participante
-        if (len(envidos)  >= 1 and envidoPart.value == participante[0]):
-            return
-
         #Si hay uno solo, averiguar si se quiso o no
         if (len(envidos) == 1):
             res = yesno("Envido", "Quiso?")
@@ -182,8 +239,54 @@ def defectoEnvido():
 #Función llamada al presionar una tecla
 def keys(event):
     print("Hola mundo")
+# yA ENTEDI AHORA TE AYUDO
 
+def cambiarColor():
+    #Se cambia de estado
+    global estadoColor # Esto que puse acá es porque es una variable global, sino me tira error
+    global app
+    global titulo
+    global nombre1
+    global nombre2
+    global nombre3
 
+    #Me tira error por eso
+    #Bueno, aca lo que hace es cambiar una variable entre false y true, porque quiero que vaya y vuelva
+    if (estadoColor == True):
+        estadoColor = False
+    else:
+        estadoColor = True
+    
+    
+    #Se cambia de color
+    if (estadoColor == True):
+        ##luego, aca quiero que se pongan los colores en base a la lista de colores dark
+        print("Se cambia al tema dark")
+        #Copie todos los colores y les pongo un color en base a la lista
+        app.bg = darkColor[0]
+        titulo.bg = darkColor[2]
+        nombre1.bg = darkColor[3]
+        nombre2.bg = darkColor[3]
+        nombre3.bg = darkColor[3]
+    if (estadoColor == False):
+        print("Se cambia al tema forest")
+        app.bg = "blue"
+        titulo.bg = "blue"
+        nombre1.bg = "blue"
+        nombre2.bg = "blue"
+        nombre3.bg = "blue"
+    #Porque esos también querría cambiarles el color. Tenían bg dentro
+    #Despues de esos, c
+    # como mas te ayudoreo que no había ninguno más
+    #Ahhh me ayudas con el escrito Seba,
+    substractPointsPlayer1.tk.config(bg="blue")
+    
+    #Seba, fijate que sean los que dicen bg no más
+    # AHHH YA VA
+    #No se que paso que ahora no puede ejecutar el archivo xd
+    #MIERDA, TOCASTE ALGO???
+    #Voy a cerrar visual, creo que se cerrará el live share
+    #Te lo mando de nuevo, en 1 minutos
 #Variablles
 participante = ["(Elegir opcion)","Jugador Uno","Jugador Dos", "Jugador Tres"]
 cantosTruco = ["(Elegir opcion)", "Nada","Truco","Retruco","Vale cuatro"]
@@ -191,6 +294,29 @@ cantosEnvido = ["(Elegir opcion)","Envido","Real envido","Falta envido"]
 juego = ["Envido", "Flor"]
 puntos = [0, 0, 0]
 
+#COLORES
+darkColor = [
+    "#404258",
+    "#474E68",
+    "#50577A",
+    "#6B728E",
+    "#C0BAD6"
+] ##Estos son los colores dark
+
+forestColor = [
+    "#3A4D39",
+    "#4F6F52",
+    "#ECE3CE",
+    "#A47E3B ",
+    "#61481C"
+]
+
+name1 = ""
+name2 = ""
+name3 = ""
+flor = True
+aPuntos = True
+estadoColor = True
 #top
 topHeight = 75
 
@@ -225,13 +351,14 @@ comboWidth = int((center - paddingComboWidth * 2) / 8 / 3.32)
 border = False
 
 #Se inicializa la aplicacion y se le da fondo, altura y ancho
-app = App("Anotador de truco", bg="#FF00EE")
+app = App("Anotador de truco", bg=darkColor[2])
 app.height = topHeight + middleHeight + bottomHeight + bottomHeightTruco + bottomHeightEnvido + bottomHeightAdd
 app.width = paddingRight + paddingLeft + center
 
 #Top box
 topBox = Box(app, align="top", width= "fill", height= topHeight, border= border)
-titulo = Text(topBox, "Anotador de truco", width="fill", color="#A6F3EB", height="fill", align="top", bg="#FF00FF")
+botonCambiarColor = PushButton(topBox, align="left", height="fill", text="Cambiar tema", command=cambiarColor)
+titulo = Text(topBox, "Anotador de truco", width="fill", color=darkColor[4], height="fill", align="top", bg=darkColor[0])
 
 #Middle box
 middleBox = Box(app, align="top", width= "fill", height = middleHeight, border= border)
@@ -240,9 +367,19 @@ paddingCenterLeft = Box(middleBox, width=paddingLeft, height=middleHeight, borde
 
 #Middle box top
 middleBoxTop = Box(middleBox, align="top", width= "fill", height = middleBoxTopHeight, border= border)
-nombre1 = Text(middleBoxTop, width="fill", align="left", text="Hola mundo", bg="#ffdef0")
-nombre2 = Text(middleBoxTop, width="fill", align="left", text="Hola mundo", bg="#ac0982")
-nombre3 = Text(middleBoxTop, width="fill", align="left", text="Hola mundo", bg="#20FFC0")
+nombre1 = Text(middleBoxTop, width="fill", align="left", text="Hola mundo", bg=darkColor[3])
+nombre2 = Text(middleBoxTop, width="fill", align="left", text="Hola mundo", bg=darkColor[3])
+nombre3 = Text(middleBoxTop, width="fill", align="left", text="Hola mundo", bg=darkColor[3])
+
+#Me refería a estas propiedades
+#AHHH ENTENDI TODO RE AL REVES
+
+#Me explique mal
+# QUEDAN VARABLES PARA PINTAR 
+#O YA TE ENCARGASTE VOS???
+
+#No, ya están pintadas, pero quería agregarle la funcionalidad de que cambien de color al presionar un boton
+#Por eso era que te pedía que las copies las variables en la función aquella
 
 #Middle box picture
 
@@ -271,6 +408,8 @@ paddingButton = Box(bottomBoxButtonsPlayer1, width=paddingButtonWidth, height="f
 addPointsPlayer1 = PushButton(bottomBoxButtonsPlayer1, width= buttonsWidth, height="fill", text="+", align="left", command=sumarPuntosJug1)
 substractPointsPlayer1 = PushButton(bottomBoxButtonsPlayer1, width= buttonsWidth, height="fill", text="-", align="right", command=restarPuntosJug1)
 
+
+
 #Player 2
 paddingButton = Box(bottomBoxButtonsPlayer2, width=paddingButtonWidth, height="fill", border=border, align="left")
 paddingButton = Box(bottomBoxButtonsPlayer2, width=paddingButtonWidth, height="fill", border=border, align="right")
@@ -287,7 +426,7 @@ substractPointsPlayer3 = PushButton(bottomBoxButtonsPlayer3, width= buttonsWidth
 bottomBoxTruco = Box(app, align="top", width= "fill", height = bottomHeightTruco, border=border)
 paddingButton = Box(bottomBoxTruco, width=paddingLeft, height="fill", border=border, align="left")
 paddingButton = Box(bottomBoxTruco, width=paddingRight, height="fill", border=border, align="right")
-trucoButton = Text(bottomBoxTruco, width=comboWidth, height="fill", text="TRUCO", align="left", bg="#00FFFF")
+trucoButton = Text(bottomBoxTruco, width=comboWidth, height="fill", text="TRUCO", align="left")
 paddingCombo = Box(bottomBoxTruco, width=paddingComboWidth, height="fill", border=border, align="left")
 trucoPart = Combo(bottomBoxTruco, width=comboWidth, height="fill", options=participante, align = "left")
 paddingCombo = Box(bottomBoxTruco, width=paddingComboWidth, height="fill", border=border, align="left")
@@ -343,4 +482,8 @@ botomSumar.tk.config(font=("impact", 15))
 #Sets the app not resizable
 app.tk.resizable(height = 0, width=0)
 
+#Change the button's background-color to blue
+substractPointsPlayer1.tk.config(bg="blue")
+
+inicializarVariables()
 app.display()

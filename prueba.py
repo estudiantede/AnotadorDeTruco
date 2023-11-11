@@ -1,6 +1,49 @@
 #Se importa TODAS las librerias
 from guizero import *
 
+def ganoPartida(participanteGanador):
+    ganador.show()
+    if (participanteGanador == 0):
+        ganadorTexto.clear()
+        ganadorTexto.append("Felicitaciones al jugador " + name1 + " por haber ganado")
+    elif (participanteGanador == 1):
+        ganadorTexto.clear()
+        ganadorTexto.append("Felicitaciones al jugador " + name2 + " por haber ganado")
+    elif (participanteGanador == 2):
+        ganadorTexto.clear()
+        ganadorTexto.append("Felicitaciones al jugador " + name3 + " por haber ganado")
+    ganadorBoton.text = "EMPEZAR NUEVA PARTIDA"
+    app.hide()
+
+def cambiarFondoImagen():
+    if (estadoColor == True):
+        for i in range(3):
+            if (cantJugadores==True and i == 1):
+                img = "images/fondoWood.png"
+                pictures[i].image = img
+                continue
+            img = "images/" + str(puntos[i]) + "-wood.png"
+            pictures[i].image = img
+    else:
+        for i in range(3):
+            if (cantJugadores==True and i == 1):
+                img = "images/fondoDark.png"
+                pictures[i].image = img
+                continue
+            img = "images/" + str(puntos[i]) + "-dark.png"
+            pictures[i].image = img
+
+def cambiarImagen(imagen, jugador):
+    #Se pone con fondo dark
+    if (estadoColor == True):
+        #print("Se pone con fondo dark")
+        img = "images/" + str(puntos[jugador]) + "-dark.png"
+        imagen.image = img
+    else:
+        #print("Se pone con fondo forest")
+        img = "images/" + str(puntos[jugador]) + "-wood.png"
+        imagen.image = img
+
 def sumarPuntosJug1():
     print(puntos[0])
     if (aPuntos == True):
@@ -13,9 +56,12 @@ def sumarPuntosJug1():
             print("Se está en la victoria")
         else:
             puntos[0] += 1
+            cambiarImagen(pictures[0], 0)
         gano(puntos[0], 0)
 
 def sumarPuntosJug2():
+    if (cantJugadores == True):
+        return
     print("Los puntos del participante 2 son" + str(puntos[1]))
     if (aPuntos == True):
         puntoTotale = 15
@@ -27,7 +73,8 @@ def sumarPuntosJug2():
             print("Se está en la victoria")
         else:
             puntos[1] += 1
-        gano(puntos[1], 0)
+            cambiarImagen(pictures[1], 1)
+        gano(puntos[1], 1)
 
 def sumarPuntosJug3():
     print("Se suma 1 punto al jugador 3")
@@ -41,7 +88,8 @@ def sumarPuntosJug3():
             print("Se está en la victoria")
         else:
             puntos[2] += 1
-        gano(puntos[2], 0)
+            cambiarImagen(pictures[2], 2)
+        gano(puntos[2], 2)
         
 
         # che no encontre mas bg de los que te puse ahí
@@ -52,25 +100,30 @@ def sumarPuntosJug3():
 def restarPuntosJug1():
     if puntos[0] > 0:
         puntos[0] -= 1
+        cambiarImagen(pictures[0], 0)
         print("Se resta 1 punto al jugador 1")
 
 def restarPuntosJug2():
+    if (cantJugadores == True):
+        return
     if puntos[1] > 0:
         puntos[1] -= 1
+        cambiarImagen(pictures[1], 1)
         print("Se resta 1 punto al jugador 2")
 
 def restarPuntosJug3():
     if puntos[2] > 0:
         puntos[2] -= 1
+        cambiarImagen(pictures[2], 2)
         print("Se resta 1 punto al jugador 3")
 
 #Funciones que todavia no hacen nada
 def cambiarNombre1():
     if (envidoButton.value == "Flor"):
-        envido.text = "Flor"
-        envidoDoble.text = "6 pts"
-        realEnvido.text = "9 pts"
-        faltaEnvido.text = "flor al resto"
+        envido.text = "3 pts"
+        envidoDoble.text = "4 pts"
+        realEnvido.text = "6 pts"
+        faltaEnvido.text = "Flor al resto"
     else:
         envido.text = "Envido"
         envidoDoble.text = "Envido"
@@ -80,50 +133,125 @@ def cambiarNombre1():
 #Se devuelve 1 si gano
 #Si perdió se devuelve 0
 def gano(puntos, participante):
-    if (aPuntos == True):
-        if (puntos >= 15):
-            print("Gano el participante " + str(participante))
-            respuesta = yesno("Nueva partida", "Se empieza nueva partida?")
-            if respuesta == True:
-                inicializarVariables()
-    else:
+    if (aPuntos == False):
         if (puntos >= 30):
             print("Gano el participante " + str(participante))
-            respuesta = yesno("Nueva partida", "Se empieza nueva partida?")
-            if respuesta == True:
-                inicializarVariables()
+            #respuesta = yesno("Nueva partida", "Se empieza nueva partida?")
+            ganoPartida(participante)
+            #inicializarVariables()
+    else:
+        if (puntos >= 15):
+            print("Gano el participante " + str(participante))
+            #respuesta = yesno("Nueva partida", "Se empieza nueva partida?")
+            ganoPartida(participante)
+            #inicializarVariables()
     return 0
 
 def inicializarVariables():
+    ganador.hide()
     puntos[0] = 0
     puntos[1] = 0
     puntos[2] = 0
+    #Se ponen las imagenes del principio
+    for i in pictures:
+        cambiarImagen(i, 0)
     empezarPartida()
 
 def empezarPartida():
-    app.hide()
-    nombre1.clear()
-    nombre1.append(question("Jugador 1", "Cómo se llama", initial_value=None))
-    nombre2.clear()
-    nombre2.append(question("Jugador 2", "Cómo se llama", initial_value=None))
-    nombre3.clear()
-    nombre3.append(question("Jugador 3", "Cómo se llama", initial_value=None))
 
+    global cantJugadores
+    global flor
+    global aPuntos
+
+    app.hide()
+
+    cantJugadores = yesno("Jugadores", "son 2 jugadores")
+    if (cantJugadores==True):
+        nombre1.clear()
+        nombre1.append(question("Jugador 1", "Cómo se llama", initial_value=None))
+        nombre3.clear()
+        nombre3.append(question("Jugador 2", "Cómo se llama", initial_value=None))
+        pictures[1].bg = darkColor[3]
+        pictures[1].image = "images/fondoDark.png"
+        
+        trucoPart.remove("Jugador Dos")
+        envidoPart.remove("Jugador Dos")
+        addPointsPlayer2.hide()
+        substractPointsPlayer2.hide()
+    else:
+        nombre1.clear()
+        nombre1.append(question("Jugador 1", "Cómo se llama", initial_value=None))
+        nombre2.clear()
+        nombre2.append(question("Jugador 2", "Cómo se llama", initial_value=None))
+        nombre3.clear()
+        nombre3.append(question("Jugador 3", "Cómo se llama", initial_value=None))
+
+        trucoPart.remove("Jugador Dos")
+        envidoPart.remove("Jugador Dos")
+        trucoPart.insert(2, "Jugador Dos")
+        envidoPart.insert(2, "Jugado Dos")
+
+    
     flor = yesno("Flor", "Se juega con flor?")
+
+    if (flor == True):
+        envidoButton.remove("Flor")
+        envidoButton.insert(1, "Flor")
+    else:
+        envidoButton.remove("Flor")
     aPuntos = yesno("Puntos", "Se juega a 15?")
     app.show()
 
+
 #Función llamada cuando se pulsa el boton de SUMAR PUNTOS
 def sumarPuntos():
-    """
+
+    #Primero, se tiene que ver si se canto falta envido, luego si se gano con envido y luego con truco
+    point = sumarPuntosCorrectos()
+    if (point == -1):
+        return
+    if (hayEnvidoFlor == -1):
+        defectoEnvido()
+    else:
+        sumarEnvido()
+        defectoEnvido()
+    for i in range(3):
+        num = gano(puntos[i], i)
+        if (num == 1):
+            return
+
     tru = sumarTruco()
+    for i in range(3):
+        gano(puntos[i], i)
     #Se fija si había truco o no
     if (tru == 0):
         defectoEnvido()
         return 
-    sumarEnvido()
-    defectoEnvido()
-    """
+    for i in range(3):
+        if (cantJugadores == True and i == 1):
+            continue
+        cambiarImagen(pictures[i], i)
+    
+    
+#Devuelve 1 si está correcto
+#Devuelve -1 si está mal
+def sumarPuntosCorrectos():
+    partPos = participante.index(trucoPart.value)
+    cantoTruco = cantosTruco.index(trucoEleccion.value)
+    if partPos == 0 or cantoTruco == 0:
+        return -1
+    return 1
+
+#Devuelve 1 si hay
+#Devuelve -1 si no hay
+def hayEnvidoFlor():
+    partPos = participante.index(envidoPart.value)
+    if (partPos == 0):
+        return -1
+    if envido.value == 0 and envidoDoble.value == 0 and realEnvido.value == 0 and faltaEnvido == 0:
+        return -1
+    return 1
+    
 
 #Función que calcula lo del truco
 def sumarTruco():
@@ -137,7 +265,7 @@ def sumarTruco():
     #print(cantoTruco)
 
     #Si ninguna de las 2 estaba seleccionada, no se hace nada. Está mal
-    if partPos == 0 or cantosTruco == 0:
+    if partPos == 0 or cantoTruco == 0:
         return 0
     
     #Se verifica cual opción ha sido seleccionada
@@ -166,7 +294,7 @@ def sumarEnvido():
     
     #Variables
     envidos = []
-    flor = 0
+    florTantos = []
     res = True
 
     # Se calcula que se canto
@@ -203,31 +331,60 @@ def sumarEnvido():
 
             #Se calcula el falta envido
             else:
-                print("Se calcula el falta envido")
+                maximo = -1
+                for i in range(len(puntos)):
+                    if (maximo <= puntos[i]):
+                        maximo = puntos[i]
+                if (maximo <= 15):
+                    if (aPuntos == True):
+                        puntos[partPos - 1] = 15
+                    else:
+                        puntos[partPos - 1] = 30
+                else:
+                    puntos[partPos-1] += 30 - maximo
+
+    #se jugo por flor
     else:
         if (faltaEnvido.value == 1):
             print("Hay flor al resto")
-            flor = -1
-        elif (realEnvido.value == 1):
-            flor = 9
-            print("Hay recontra flor 9 pts")
-        elif (envidoDoble.value == 1):
-            flor = 6
+            florTantos.append(-1)
+        if (realEnvido.value == 1):
+            flor.append(6)
+            print("Hay 6 pts")
+        if (envidoDoble.value == 1):
+            florTantos.append(4)
             print("Hay recontra flor 6pts")
-        elif (envido.value == 1):
-            flor = 3
+        if (envido.value == 1):
+            florTantos.append(3)
             print("Hay flor")
         
-        #Verificar que se haya ingresado a algun participante
-        if (flor != 0 and envidoPart.value == participante[0]):
-            return
-        elif (flor == 0):
-            return
-
-        if (flor != -1):
-            puntos[partPos - 1] += flor
+        #Verificar si se jugó por al resto
+        if (-1 in florTantos):
+            res = yesno("Al resto", "Quiso?")
+            if (res == False):
+                puntos[partPos - 1] += 6
+            else:
+                #Se calcula cual es el maximo
+                maximo = -1
+                for i in range(len(puntos)):
+                    if (maximo <= puntos[i]):
+                        maximo = puntos[i]
+                #Se gana directamente si es menor a 15
+                if (maximo <= 15):
+                    if (aPuntos == True):
+                        puntos[partPos - 1] = 15
+                    else:
+                        puntos[partPos - 1] = 30
+                #Si es mayor a 15, entonces, se juega a lo que falta al que va ganando
+                else:
+                    puntos[partPos-1] += 30 - maximo
         else:
-            print("El participante " + str(partPos) + " ha ganado la partida")
+            if (6 in florTantos):
+                puntos[partPos-1] += 6
+            elif (4 in florTantos):
+                puntos[partPos-1] += 4
+            elif (3 in florTantos):
+                puntos[partPos-1] += 3
 
 def defectoEnvido():
     #Se cambian todos los valores del envido a 0 (se "destildan")
@@ -235,6 +392,8 @@ def defectoEnvido():
     envidoDoble.value = 0
     realEnvido.value = 0
     faltaEnvido.value = 0
+    envidoPart.value = participante[0]
+    envidoButton.value = juego[0]
 
 #Función llamada al presionar una tecla
 def keys(event):
@@ -250,8 +409,10 @@ def cambiarColor():
     global nombre2
     global nombre3
 
-    #Me tira error por eso
-    #Bueno, aca lo que hace es cambiar una variable entre false y true, porque quiero que vaya y vuelva
+    #Se cambia el fondo de las imagenes
+    cambiarFondoImagen()
+
+    #se intercambia entre true y false
     if (estadoColor == True):
         estadoColor = False
     else:
@@ -263,30 +424,57 @@ def cambiarColor():
         ##luego, aca quiero que se pongan los colores en base a la lista de colores dark
         print("Se cambia al tema dark")
         #Copie todos los colores y les pongo un color en base a la lista
-        app.bg = darkColor[0]
-        titulo.bg = darkColor[2]
+        app.bg = darkColor[2]
+        titulo.bg = darkColor[0]
+        titulo.text_color = darkColor[4]
         nombre1.bg = darkColor[3]
         nombre2.bg = darkColor[3]
         nombre3.bg = darkColor[3]
+
+        botonCambiarColor.tk.config(bg=darkColor[3])
+        addPointsPlayer1.tk.config(bg=darkColor[3])
+        substractPointsPlayer1.tk.config(bg=darkColor[3])
+
+        addPointsPlayer2.tk.config(bg=darkColor[3])
+        substractPointsPlayer2.tk.config(bg=darkColor[3])
+
+        addPointsPlayer3.tk.config(bg=darkColor[3])
+        substractPointsPlayer3.tk.config(bg=darkColor[3])
+        
+        botomSumar.tk.config(bg=darkColor[3])
+
+        envidoButton.bg = darkColor[3]
+        envidoPart.bg = darkColor[3]
+
+        trucoPart.bg = darkColor[3]
+        trucoEleccion.bg = darkColor[3]
     if (estadoColor == False):
         print("Se cambia al tema forest")
-        app.bg = "blue"
-        titulo.bg = "blue"
-        nombre1.bg = "blue"
-        nombre2.bg = "blue"
-        nombre3.bg = "blue"
-    #Porque esos también querría cambiarles el color. Tenían bg dentro
-    #Despues de esos, c
-    # como mas te ayudoreo que no había ninguno más
-    #Ahhh me ayudas con el escrito Seba,
-    substractPointsPlayer1.tk.config(bg="blue")
-    
-    #Seba, fijate que sean los que dicen bg no más
-    # AHHH YA VA
-    #No se que paso que ahora no puede ejecutar el archivo xd
-    #MIERDA, TOCASTE ALGO???
-    #Voy a cerrar visual, creo que se cerrará el live share
-    #Te lo mando de nuevo, en 1 minutos
+        app.bg = forestColor[0]
+        titulo.bg = forestColor[1]
+        titulo.text_color = forestColor[3]
+        nombre1.bg = forestColor[3]
+        nombre2.bg = forestColor[3]
+        nombre3.bg = forestColor[3]
+
+        botonCambiarColor.tk.config(bg=forestColor[3])
+        addPointsPlayer1.tk.config(bg=forestColor[4])
+        substractPointsPlayer1.tk.config(bg=forestColor[4])
+
+        addPointsPlayer2.tk.config(bg=forestColor[4])
+        substractPointsPlayer2.tk.config(bg=forestColor[4])
+
+        addPointsPlayer3.tk.config(bg=forestColor[4])
+        substractPointsPlayer3.tk.config(bg=forestColor[4])
+
+        botomSumar.tk.config(bg=forestColor[4])
+
+        envidoButton.bg = forestColor[4]
+        envidoPart.bg = forestColor[4]
+
+        trucoPart.bg = forestColor[4]
+        trucoEleccion.bg = forestColor[4]
+
 #Variablles
 participante = ["(Elegir opcion)","Jugador Uno","Jugador Dos", "Jugador Tres"]
 cantosTruco = ["(Elegir opcion)", "Nada","Truco","Retruco","Vale cuatro"]
@@ -307,16 +495,22 @@ forestColor = [
     "#3A4D39",
     "#4F6F52",
     "#ECE3CE",
-    "#A47E3B ",
+    "#A47E3B",
     "#61481C"
 ]
 
+#Variables de nombres de los participantes
 name1 = ""
 name2 = ""
 name3 = ""
+
+#Cantidad de jugadores
+cantJugadores = True
+
 flor = True
 aPuntos = True
-estadoColor = True
+estadoColor = False
+
 #top
 topHeight = 75
 
@@ -367,28 +561,18 @@ paddingCenterLeft = Box(middleBox, width=paddingLeft, height=middleHeight, borde
 
 #Middle box top
 middleBoxTop = Box(middleBox, align="top", width= "fill", height = middleBoxTopHeight, border= border)
-nombre1 = Text(middleBoxTop, width="fill", align="left", text="Hola mundo", bg=darkColor[3])
-nombre2 = Text(middleBoxTop, width="fill", align="left", text="Hola mundo", bg=darkColor[3])
-nombre3 = Text(middleBoxTop, width="fill", align="left", text="Hola mundo", bg=darkColor[3])
-
-#Me refería a estas propiedades
-#AHHH ENTENDI TODO RE AL REVES
-
-#Me explique mal
-# QUEDAN VARABLES PARA PINTAR 
-#O YA TE ENCARGASTE VOS???
-
-#No, ya están pintadas, pero quería agregarle la funcionalidad de que cambien de color al presionar un boton
-#Por eso era que te pedía que las copies las variables en la función aquella
+nombre1 = Text(middleBoxTop, width="fill", align="left", text="", bg=darkColor[3])
+nombre2 = Text(middleBoxTop, width="fill", align="left", text="", bg=darkColor[3])
+nombre3 = Text(middleBoxTop, width="fill", align="left", text="", bg=darkColor[3])
 
 #Middle box picture
 
 middleBoxPicture = Box(middleBox, align="top", width= "fill", height = middleBoxPictureHeight, border= border)
 
 pictures = [
-Picture(middleBoxPicture, image="images/bk.jpg", width=thirdWidth, height=middleBoxPictureHeight, align="left"),
-Picture(middleBoxPicture, image="images/bk.jpg", width=thirdWidth, height=middleBoxPictureHeight, align="left"),
-Picture(middleBoxPicture, image="images/bk.jpg", width=thirdWidth, height=middleBoxPictureHeight, align="left")
+Picture(middleBoxPicture, image="images/0-wood.png", width=thirdWidth, height=middleBoxPictureHeight, align="left"),
+Picture(middleBoxPicture, image="images/0-wood.png", width=thirdWidth, height=middleBoxPictureHeight, align="left"),
+Picture(middleBoxPicture, image="images/0-wood.png", width=thirdWidth, height=middleBoxPictureHeight, align="rigth")
 ]
 #Bottom box picture
 bottomBox = Box(app, align="top", width= "fill", height = bottomHeight, border= border)
@@ -443,8 +627,8 @@ paddingCombo = Box(bottomBoxEnvido, width=paddingComboWidth, height="fill", bord
 
 #Se crea una lista de checkboxes para calcular que se ha jugado
 envidoEleccion = Box(bottomBoxEnvido, width="fill", height="fill", border=border, align="left")
-envido = CheckBox(envidoEleccion, text="Envido         ", width="fill", align="top")
-envidoDoble = CheckBox(envidoEleccion, text="Envido         ", align="top", width="fill")
+envido = CheckBox(envidoEleccion, text="Envido", width="fill", align="top")
+envidoDoble = CheckBox(envidoEleccion, text="Envido", align="top", width="fill")
 realEnvido = CheckBox(envidoEleccion, text="Real Envido", align="top", width="fill")
 faltaEnvido = CheckBox(envidoEleccion, text="Falta Envido", align="top", width="fill")
 
@@ -476,14 +660,14 @@ trucoButton.tk.config(font=("Cambria", 12))
 botomSumar.tk.config(font=("impact", 15))
 
 #Alternative windows
-#ganador = Window(app, title="Ganador", width=400, height=400)
-
+ganador = Window(app, title="Ganador", width=600, height=400)
+ganadorTexto = Text(ganador, align="top", width="fill", height=10, size=20, text="")
+ganadorBoton = PushButton(ganador, text="", command=inicializarVariables)
+ganador.hide()
 
 #Sets the app not resizable
 app.tk.resizable(height = 0, width=0)
 
-#Change the button's background-color to blue
-substractPointsPlayer1.tk.config(bg="blue")
-
+cambiarColor()
 inicializarVariables()
 app.display()

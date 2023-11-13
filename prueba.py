@@ -90,13 +90,7 @@ def sumarPuntosJug3():
             puntos[2] += 1
             cambiarImagen(pictures[2], 2)
         gano(puntos[2], 2)
-        
 
-        # che no encontre mas bg de los que te puse ahí
-        #Ahí me fijo
-        #ahora te digo
-        #Wtf
-        #nose se esta bien lo que hice o si m
 def restarPuntosJug1():
     if puntos[0] > 0:
         puntos[0] -= 1
@@ -117,7 +111,6 @@ def restarPuntosJug3():
         cambiarImagen(pictures[2], 2)
         print("Se resta 1 punto al jugador 3")
 
-#Funciones que todavia no hacen nada
 def cambiarNombre1():
     if (envidoButton.value == "Flor"):
         envido.text = "3 pts"
@@ -165,6 +158,7 @@ def empezarPartida():
 
     app.hide()
 
+    #Hace un pop-up que deja responder SI o NO al usuario unicamente
     cantJugadores = yesno("Jugadores", "son 2 jugadores")
     if (cantJugadores==True):
         nombre1.clear()
@@ -173,18 +167,27 @@ def empezarPartida():
         nombre3.append(question("Jugador 2", "Cómo se llama", initial_value=None))
         pictures[1].bg = darkColor[3]
         pictures[1].image = "images/fondoDark.png"
-        
+
+        #Saca a un elemento de una lista de un objeto Combo
         trucoPart.remove("Jugador Dos")
         envidoPart.remove("Jugador Dos")
+
+        #Oculta los botones
         addPointsPlayer2.hide()
         substractPointsPlayer2.hide()
     else:
         nombre1.clear()
-        nombre1.append(question("Jugador 1", "Cómo se llama", initial_value=None))
+        #Permite al usuario 
+        name1 = question("Jugador 1", "Cómo se llama", initial_value=None)
+        nombre1.append(name1)
+        
         nombre2.clear()
-        nombre2.append(question("Jugador 2", "Cómo se llama", initial_value=None))
+        name2 = question("Jugador 2", "Cómo se llama", initial_value=None)
+        nombre2.append(name2)
+
+        name3 = question("Jugador 3", "Cómo se llama", initial_value=None)
         nombre3.clear()
-        nombre3.append(question("Jugador 3", "Cómo se llama", initial_value=None))
+        nombre3.append(name3)
 
         trucoPart.remove("Jugador Dos")
         envidoPart.remove("Jugador Dos")

@@ -2,9 +2,13 @@
 from guizero import *
 
 def ganoPartida(participanteGanador):
+    global name1
+    global name2
+    global name3
     ganador.show()
     if (participanteGanador == 0):
         ganadorTexto.clear()
+        
         ganadorTexto.append("Felicitaciones al jugador " + name1 + " por haber ganado")
     elif (participanteGanador == 1):
         ganadorTexto.clear()
@@ -155,16 +159,21 @@ def empezarPartida():
     global cantJugadores
     global flor
     global aPuntos
-
+    global name1
+    global name2
+    global name3
     app.hide()
 
     #Hace un pop-up que deja responder SI o NO al usuario unicamente
     cantJugadores = yesno("Jugadores", "son 2 jugadores")
     if (cantJugadores==True):
         nombre1.clear()
-        nombre1.append(question("Jugador 1", "Cómo se llama", initial_value=None))
+        name1 = question("Jugador 1", "Cómo se llama", initial_value=None)
+        nombre1.append(name1)
+
         nombre3.clear()
-        nombre3.append(question("Jugador 2", "Cómo se llama", initial_value=None))
+        name2 = question("Jugador 2", "Cómo se llama", initial_value=None)
+        nombre3.append(name2)
         pictures[1].bg = darkColor[3]
         pictures[1].image = "images/fondoDark.png"
 

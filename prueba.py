@@ -2,13 +2,14 @@
 from guizero import *
 
 def ganoPartida(participanteGanador):
+    #Se considera que se va a usar una variable global, no que pertenezca a la función
     global name1
     global name2
     global name3
+    
     ganador.show()
     if (participanteGanador == 0):
         ganadorTexto.clear()
-        
         ganadorTexto.append("Felicitaciones al jugador " + name1 + " por haber ganado")
     elif (participanteGanador == 1):
         ganadorTexto.clear()
@@ -168,6 +169,8 @@ def empezarPartida():
     cantJugadores = yesno("Jugadores", "son 2 jugadores")
     if (cantJugadores==True):
         nombre1.clear()
+
+        #Se pregunta sobre como se llama en un pop-up que permite ingresar texto
         name1 = question("Jugador 1", "Cómo se llama", initial_value=None)
         nombre1.append(name1)
 
@@ -248,8 +251,12 @@ def sumarPuntos():
 #Devuelve 1 si está correcto
 #Devuelve -1 si está mal
 def sumarPuntosCorrectos():
+
+    #Se busca en que posición de la lista está el item
     partPos = participante.index(trucoPart.value)
     cantoTruco = cantosTruco.index(trucoEleccion.value)
+
+    #Si es la primer posición, no se eligió nada
     if partPos == 0 or cantoTruco == 0:
         return -1
     return 1
